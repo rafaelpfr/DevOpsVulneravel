@@ -6,46 +6,46 @@ on:
 
 jobs:
 
-  tests_unit:
-    runs-on: ubuntu-latest
+#   tests_unit:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v2 
+#     steps:
+#       - uses: actions/checkout@v2 
       
-      - name: create env file
-        run: |
-          touch .env
-          echo APP_PRIVATE_KEY="${{ secrets.APP_PRIVATE_KEY }}" >> .env
-          echo MONGO_INITDB_USER="${{ secrets.MONGO_INITDB_USER }}" >> .env
-          echo MONGO_INITDB_PWD="${{ secrets.MONGO_INITDB_PWD }}" >> .env
+#       - name: create env file
+#         run: |
+#           touch .env
+#           echo APP_PRIVATE_KEY="${{ secrets.APP_PRIVATE_KEY }}" >> .env
+#           echo MONGO_INITDB_USER="${{ secrets.MONGO_INITDB_USER }}" >> .env
+#           echo MONGO_INITDB_PWD="${{ secrets.MONGO_INITDB_PWD }}" >> .env
           
-      - name: Start containers
-        run: docker-compose -p projeto -f "docker-compose.yml" up -d
+#       - name: Start containers
+#         run: docker-compose -p projeto -f "docker-compose.yml" up -d
       
-      - name: Run tests
-        run: docker container exec app npm test
+#       - name: Run tests
+#         run: docker container exec app npm test
 
     
-  deploy-images:
-    needs: tests_unit
-    runs-on: ubuntu-latest
+#   deploy-images:
+#     needs: tests_unit
+#     runs-on: ubuntu-latest
 
-    steps:
-    - uses: actions/checkout@v2
+#     steps:
+#     - uses: actions/checkout@v2
 
-    - name: Build and Push Docker Image
-      uses: mr-smithers-excellent/docker-build-push@v4
-      with:
-        image: rafa73/project_app
-        tag: latest
-        registry: docker.io
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+#     - name: Build and Push Docker Image
+#       uses: mr-smithers-excellent/docker-build-push@v4
+#       with:
+#         image: rafa73/project_app
+#         tag: latest
+#         registry: docker.io
+#         username: ${{ secrets.DOCKER_USERNAME }}
+#         password: ${{ secrets.DOCKER_PASSWORD }}
  
  
  
   deploy-production:
-    needs: [deploy-images]
+#     needs: [deploy-images]
     runs-on: ubuntu-latest
 
     steps:
@@ -62,12 +62,12 @@ jobs:
           ${{ secrets.OCI_API_KEY }}
         verbose: true
 
-    - name: Get old vm
-      id: old_vm
-      run: echo ::set-output name=id::$(oci compute instance list -c ${{ secrets.OCI_TENANCY }} | jq -r '.data[-1]."id"')
+#     - name: Get old vm
+#       id: old_vm
+#       run: echo ::set-output name=id::$(oci compute instance list -c ${{ secrets.OCI_TENANCY }} | jq -r '.data[-1]."id"')
 
-    - name: Terminate old vm
-      run: oci compute instance terminate --force --instance-id ${{ steps.old_vm.outputs.id }}
+#     - name: Terminate old vm
+#       run: oci compute instance terminate --force --instance-id ${{ steps.old_vm.outputs.id }}
 
     - name: Create new vm
       id: new_vm
