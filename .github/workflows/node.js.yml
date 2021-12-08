@@ -10,15 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - run: 'echo "$APP_PRIVATE_KEY" > file.txt'
-      shell: bash
-      env:
-        SSH_KEY: ${{secrets.APP_PRIVATE_KEY}}
-
-    - run: 'cat file.txt'
-      shell: bash
-
-
       - uses: actions/checkout@v2 
       
       - name: create env file
