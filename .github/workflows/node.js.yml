@@ -62,12 +62,12 @@ jobs:
           ${{ secrets.OCI_API_KEY }}
         verbose: true
 
-    - name: Get old vm
-      id: old_vm
-      run: echo ::set-output name=id::$(oci compute instance list -c ${{ secrets.OCI_TENANCY }} | jq -r '.data[-1]."id"')
+#     - name: Get old vm
+#       id: old_vm
+#       run: echo ::set-output name=id::$(oci compute instance list -c ${{ secrets.OCI_TENANCY }} | jq -r '.data[-1]."id"')
 
-    - name: Terminate old vm
-      run: oci compute instance terminate --force --instance-id ${{ steps.old_vm.outputs.id }}
+#     - name: Terminate old vm
+#       run: oci compute instance terminate --force --instance-id ${{ steps.old_vm.outputs.id }}
 
     - name: Create new vm
       id: new_vm
